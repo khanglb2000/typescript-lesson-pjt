@@ -1,44 +1,65 @@
 "use strict";
-let stringArr = ['oh', 'my', 'god'];
-let cars = ['Hot Wheels', 'Tomica', 1980];
-let mixedData = ['Toy', 2000, true];
-stringArr[0] = 'Ken';
-stringArr.push('Then');
-cars[0] = 2005;
-cars.unshift('Matchbox');
-console.log("🚀 ~ file: main.ts:12 ~ cars:", cars);
-let test = [];
-let bands = [];
-bands.push('Shake');
-// Tuple
-// Type must in order
-let myTuple = ['Ken', 2005, true];
-// Object
-let myObj;
-myObj = mixedData;
-console.log("🚀 ~ file: main.ts:26 ~ myObj:", typeof myObj);
-const exampleObj = {
-    id: 2,
-    name: 'Ken',
-    active: true
+// Literal types
+let myName;
+let userName;
+userName = 'Amy';
+// Functions
+const add = (a, b) => {
+    return a + b;
 };
-let emp = {
-    name: 'Eddie',
-    active: true,
-    cars: [2, 'Twin Mill', 'Bone Shaker']
+const subtract = (a, b) => {
+    return a - b;
 };
-console.log("🚀 ~ file: main.ts:45 ~ emp:", emp);
-const greetCreator = (employee) => {
-    return `Hello ${employee.name}!`;
+const logMsg = (message) => {
+    console.log(message);
 };
-console.log(greetCreator(emp));
-// Enums
-var Grade;
-(function (Grade) {
-    Grade[Grade["dfs"] = 0] = "dfs";
-    Grade[Grade["dsa"] = 1] = "dsa";
-    Grade[Grade["dse"] = 5] = "dse";
-    Grade[Grade["sad"] = 6] = "sad";
-    Grade[Grade["aas"] = 7] = "aas";
-})(Grade || (Grade = {}));
-console.log(Grade.dse);
+logMsg('Hello!');
+logMsg(add(1, 2));
+logMsg(subtract(1, 2));
+let multiply = function (c, d) {
+    return c * d;
+};
+logMsg(multiply(4, 5));
+// optional parameters
+const addAll = (a, b, c) => {
+    if (typeof c !== 'undefined') {
+        return a + b + c;
+    }
+    return a + b;
+};
+// default parameter value
+const sumAll = (a, b, c = 2) => {
+    return a + b + c;
+};
+logMsg(addAll(1, 2, 3));
+logMsg(addAll(1, 2));
+logMsg(sumAll(4, 5));
+// Rest parameter
+const total = (...nums) => {
+    return nums.reduce((prev, curr) => prev + curr);
+};
+logMsg(total(1, 2, 3, 4));
+const createError = (errMsg) => {
+    throw new Error(errMsg);
+};
+const infinite = () => {
+    let i = 1;
+    while (true) {
+        i++;
+        if (i > 100)
+            break;
+    }
+};
+// Custom type guard
+const isNumber = (value) => {
+    return typeof value === 'number'
+        ? true : false;
+};
+// Use of never type
+const numberOrString = (value) => {
+    if (typeof value === 'string')
+        return 'string';
+    if (isNumber(value))
+        return 'number';
+    return createError('This should never happen!');
+};
