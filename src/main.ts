@@ -1,96 +1,26 @@
-// Types aliases
-type stringOrNumber = string | number;
+type One = string;
+type Two = string | number;
+type Three = 'hello'
 
-type stringOrNumberArray = (string | number)[];
+// convert to more or less specific
+let a: One = 'hello';
+let b = a as Two; // less specific
+let c = a as Three; // more specific
 
-type Creator = {
-    name: string,
-    active: boolean,
-    age?: number, // optional
-    cars: stringOrNumberArray
+let d = <One>'world';
+let e = <string | number>'world';
+
+const addOrConcat = (a: number, b: number, c: 'add' | 'concat'): number | string => {
+    if(c === 'add') return a + b;
+    return '' + a + b;
 }
 
-type UserId = stringOrNumber
+let myVal: string = addOrConcat(2, 3, 'concat') as string;
+// Be careful, TS show no error, but a string is returned
+let nextVal: number = addOrConcat(2, 3, 'concat') as number;
 
-// Literal types
-let myName: 'Dave'
+// The DOM
+const img = document.querySelector('img') as HTMLImageElement;
+const myImg = document.getElementById('#myImg') as HTMLImageElement;
+const nextImg = <HTMLImageElement>document.getElementById('#myId');
 
-let userName: 'Dave' | 'Josn' | 'Amy'
-userName = 'Amy'
-
-// Functions
-const add = (a: number, b: number): number => {
-    return a + b;
-}
-
-const subtract = (a: number, b: number): number => {
-    return a - b;
-}
-
-const logMsg = (message: any): void => {
-    console.log(message);
-}
-
-logMsg('Hello!');
-logMsg(add(1, 2));
-logMsg(subtract(1, 2));
-
-// type mathFunction = (a: number, b: number) => number
-interface mathFunction { 
-    (a: number, b: number): number
-}
-
-let multiply: mathFunction = function(c, d) {
-    return c * d;
-}
-
-logMsg(multiply(4, 5));
-
-// optional parameters
-const addAll = (a: number, b: number, c?:number): number => {
-    if(typeof c !== 'undefined') {
-        return a + b + c;
-    }
-    return a + b;
-}
-
-// default parameter value
-const sumAll = (a: number, b: number, c: number = 2): number => {
-    return a + b + c;
-}
-
-logMsg(addAll(1, 2, 3));
-logMsg(addAll(1, 2));
-logMsg(sumAll(4, 5));
-
-// Rest parameter
-const total = (...nums: number[]): number => {
-    return nums.reduce((prev, curr) => prev + curr);
-}
-
-logMsg(total(1, 2, 3, 4));
-
-const createError = (errMsg: string) => {
-    throw new Error(errMsg);
-}
-
-const infinite = () => {
-    let i: number = 1;
-    while(true) {
-        i++;
-        if(i > 100) break
-    }
-}
-
-// Custom type guard
-const isNumber = (value: any): boolean => {
-    return typeof value === 'number'
-        ? true: false;
-}
-
-// Use of never type
-const numberOrString = (value: number | string): string => {
-    if(typeof value === 'string') return 'string';
-    if(isNumber(value)) return 'number';
-    return createError('This should never happen!');
-}
