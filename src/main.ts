@@ -1,85 +1,65 @@
-// Index Signatures
-// interface TransactionObj {
-//     [index: string]: number
-// }
+// Generics
+const echo = <T>(arg : T): T => arg 
 
-interface TransactionObj {
-    readonly [index: string]: number,
-    Pizza: number,
-    Books: number,
-    Job: number,
+const isObj = <T>(arg: T): boolean => {
+    return (typeof arg === 'object' 
+    && !Array.isArray(arg) 
+    && arg != null)
 }
 
-const todayTransactions: TransactionObj = {
-    Pizza: -10,
-    Books: -5,
-    Job: 50
-}
+console.log(isObj(true));
+console.log(isObj('Ken'));
+console.log(isObj([1,2,3]));
+console.log(isObj({name: 'Ken'}));
+console.log(isObj(null));
 
-console.log(todayTransactions.Pizza);
-
-let prop: string = 'Pizza'
-console.log(todayTransactions[prop]);
-
-const todayNet = (transactions: TransactionObj): number => {
-    let total = 0;
-    for(const transaction in transactions) {
-        total += transactions[transaction]
+const isTrue = <T>(arg: T): {arg: T, is: boolean} => {
+    if(Array.isArray(arg) && !arg.length) {
+        return {arg: arg, is: false}
     }
-    return total;
+    if(isObj(arg) && !Object.keys(arg as keyof T).length) {
+        return {arg: arg, is: false}
+    }
+    return {arg: arg, is: !!arg}
 }
 
-console.log(todayNet(todayTransactions));
+console.log(isTrue(true));
+console.log(isTrue('Ken'));
+console.log(isTrue([1,2,3]));
+console.log(isTrue({name: 'Ken'}));
+console.log(isTrue(null));
+console.log(isTrue([]));
+console.log(isTrue(undefined));
 
-// ==========================
-interface Student {
-    [key: string]: number | string | number[] | undefined,
-    name: string,
-    GPA: number,
-    classes?: number[]
+// Use interface
+interface BoolCheck<T> {
+    value: T,
+    is: boolean,
 }
 
-const student: Student = {
-    name: 'Ken',
-    GPA: 8.5,
-    classes: [100, 110]
+const checkBoolValue = <T>(arg: T): BoolCheck<T> => {
+    if(Array.isArray(arg) && !arg.length) {
+        return {value: arg, is: false}
+    }
+    if(isObj(arg) && !Object.keys(arg as keyof T).length) {
+        return {value: arg, is: false}
+    }
+    return {value: arg, is: !!arg}
 }
 
-// console.log(student.test);
-
-for(const key in student) {
-    console.log(`${key}: ${student[key as keyof Student]}`);
+interface HasId {
+    id: number
 }
 
-Object.keys(student).map(key => {
-    console.log(student[key as keyof typeof student]);
-})
-
-const logStudentKey = (student: Student, key: keyof Student): void => {
-    console.log(`Student ${key}: ${student[key]}`);  
+const processUser = <T extends HasId>(user: T): T => {
+    // process user with logic here
+    return user;
 }
 
-logStudentKey(student, 'GPA')
+console.log(processUser({id: 1, name: 'Ken'}));
 
-// =================
-// interface Incomes {
-//     [key: string]: number
-// }
-
-type Streams = 'salary' | 'bonus' | 'sidehustle'
-
-type Incomes = Record<Streams, number>
-
-const monthlyIncomes: Incomes = {
-    salary: 2000,
-    bonus: 500,
-    sidehustle: 100
+const getUserProperty = <T extends HasId, K extends keyof T>(users: T[], key: K): T[K][] => {
+    return users.map(user => user[key]);
 }
-
-for(const revenue in monthlyIncomes) {
-    console.log(monthlyIncomes[revenue as keyof Incomes]);
-    
-}
-
 
 
