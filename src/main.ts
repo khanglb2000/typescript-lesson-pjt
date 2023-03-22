@@ -1,119 +1,85 @@
-class Coder {
-    secondLang!: string;
+// Index Signatures
+// interface TransactionObj {
+//     [index: string]: number
+// }
 
-    constructor(
-        public readonly name: string, 
-        public music: string, 
-        private age: number, 
-        protected lang: string = 'TypeScript'
-    ) {
-        this.name = name;
-        this.music = music;
-        this.age = age;
-        this.lang = lang;
-    }
-
-    public getAge() {
-        return `Hello, I'm ${this.age} years old.`;
-    }
+interface TransactionObj {
+    readonly [index: string]: number,
+    Pizza: number,
+    Books: number,
+    Job: number,
 }
 
-const Ken = new Coder('Ken', 'Pop', 25);
-console.log(Ken.getAge());
-
-
-class WebDev extends Coder {
-    constructor(
-        public computer: string,
-        name: string,
-        music: string,
-        age: number,
-    ) {
-        super(name, music, age);
-        this.computer = computer;
-    }
-
-    public getLang() {
-        return `I write ${this.lang}.`;
-    }
+const todayTransactions: TransactionObj = {
+    Pizza: -10,
+    Books: -5,
+    Job: 50
 }
 
-const Lin = new WebDev('Mac', 'Lin', 'Rock', 20);
-console.log(Lin.getLang());
+console.log(todayTransactions.Pizza);
 
-// =========================
-interface Musician {
+let prop: string = 'Pizza'
+console.log(todayTransactions[prop]);
+
+const todayNet = (transactions: TransactionObj): number => {
+    let total = 0;
+    for(const transaction in transactions) {
+        total += transactions[transaction]
+    }
+    return total;
+}
+
+console.log(todayNet(todayTransactions));
+
+// ==========================
+interface Student {
+    [key: string]: number | string | number[] | undefined,
     name: string,
-    instrument: string,
-    play(action: string): string,
+    GPA: number,
+    classes?: number[]
 }
 
-class Guitarist implements Musician {
-    name: string
-    instrument: string
-
-    constructor(name: string, instrument: string) {
-        this.name = name
-        this.instrument = instrument
-    }
-
-    play(action: string) {
-        return `${this.name} ${action} the ${this.instrument}.`
-    }
+const student: Student = {
+    name: 'Ken',
+    GPA: 8.5,
+    classes: [100, 110]
 }
 
-const Page = new Guitarist('John', 'guitar')
-console.log(Page.play('strums'));
+// console.log(student.test);
 
-// =============================
-class Peeps {
-    static count: number = 0
-
-    static getCount(): number {
-        return Peeps.count;
-    }
-
-    public id: number
-
-    constructor(public name: string) {
-        this.name = name;
-        this.id = ++Peeps.count;
-    }
+for(const key in student) {
+    console.log(`${key}: ${student[key as keyof Student]}`);
 }
 
-const Fou = new Peeps('Fou');
-const Ioe = new Peeps('Ioe');
-const Wan = new Peeps('Wan');
+Object.keys(student).map(key => {
+    console.log(student[key as keyof typeof student]);
+})
 
-console.log(Peeps.count);
-
-// =========================
-class Bands {
-    private dataState: string[]
-
-    constructor() {
-        this.dataState = []
-    }
-
-    public get data(): string[] {
-        return this.dataState;
-    }
-
-    public set data(value: string[]) {
-        if(Array.isArray(value) && value.every(el => typeof el === 'string')) {
-            this.dataState = value
-            return 
-        } else {
-            throw new Error("Param is not an array of strings!")
-        } 
-    }
+const logStudentKey = (student: Student, key: keyof Student): void => {
+    console.log(`Student ${key}: ${student[key]}`);  
 }
 
-const myBands = new Bands();
-myBands.data = ['He Kim', 'Gio Mnife'];
-console.log(myBands.data);
-myBands.data = [...myBands.data, 'Tremiun'];
-console.log(myBands.data);
+logStudentKey(student, 'GPA')
+
+// =================
+// interface Incomes {
+//     [key: string]: number
+// }
+
+type Streams = 'salary' | 'bonus' | 'sidehustle'
+
+type Incomes = Record<Streams, number>
+
+const monthlyIncomes: Incomes = {
+    salary: 2000,
+    bonus: 500,
+    sidehustle: 100
+}
+
+for(const revenue in monthlyIncomes) {
+    console.log(monthlyIncomes[revenue as keyof Incomes]);
+    
+}
 
 
 
